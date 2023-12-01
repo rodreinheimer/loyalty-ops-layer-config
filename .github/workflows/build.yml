@@ -60,7 +60,7 @@ jobs:
           name: build_assets
           path: build/loyalty-ops-layer-config
       - name: Output Contents
-        run: ls -R
+        run: ls -a -R
       - name: Deploy Layer
         id: deploy
         uses: ./build/loyalty-ops-layer-config/.github/actions/deploy-layer-js
