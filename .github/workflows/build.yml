@@ -78,3 +78,4 @@ jobs:
           bucket: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./build_assets
+          package-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip

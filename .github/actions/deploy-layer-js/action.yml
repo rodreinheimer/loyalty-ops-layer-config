@@ -11,6 +11,9 @@ inputs:
   dist-folder:
     description: 'The folder containing deployalble files.'
     required: true
+  package-name:
+    description: 'The name of the zip file.'
+    required: true
 outputs:
   website-url:
     description: 'The URL of the deployed website.'
