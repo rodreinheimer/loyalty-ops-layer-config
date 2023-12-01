@@ -63,7 +63,7 @@ jobs:
         run: ls -R
       - name: Deploy Layer
         id: deploy
-        uses: build/loyalty-ops-layer-config/.github/actions/deploy-layer-js
+        uses: ./build/loyalty-ops-layer-config/.github/actions/deploy-layer-js
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
