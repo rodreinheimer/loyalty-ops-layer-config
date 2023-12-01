@@ -14,7 +14,7 @@ jobs:
       BUILD_KEY: ${{ github.sha }}
 
     steps: 
-      - name: Get Fundation Repo
+      - name: Get Config Repo
         uses: actions/checkout@v4
         with:
           path: build/loyalty-ops-layer-config
@@ -50,6 +50,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Get Config Repo
+        uses: actions/checkout@v4
+        with:
+          path: build/loyalty-ops-layer-config
       - name: Get Build Artifacts
         uses: actions/download-artifact@v3
         with:
