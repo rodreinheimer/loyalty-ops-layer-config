@@ -11,6 +11,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
+      BUILD_KEY: ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}-${{ steps.build_id.outputs.id }}
 
     steps: 
       - name: Get Fundation Repo
@@ -40,6 +41,4 @@ jobs:
 
       - name: Clean Up Build Staging
         run: |
-          NOW = $(date +"%Y-%m-%d-%H-%M")
-          echo "now ${NOW}"
-          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${NOW}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
+          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${{ env.BUILD_KEY }}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
