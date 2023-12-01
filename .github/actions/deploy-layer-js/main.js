@@ -8,21 +8,18 @@ function run() {
     const bucketRegion = core.getInput('bucket-region', { required: true});
     const distFolder = core.getInput('dist-folder', {required: true});
     const packageName = core.getInput('package-name', {required: true});
-    const message = 'bucket[`${bucket}`] bucketRegion[`${bucketRegion}`] distFolder[`${distFolder}`]'
+    const layerName = core.getInput('layer-name', {required: true});
+    const layerDescription = core.getInput('layer-description', {required: true});
 
-    console.log(message)
-    console.log(bucket)
-    console.log(bucketRegion)
-    console.log(distFolder)
-
-    // 2) upload files
+    // 2) upload layer
     const s3Uri = `s3://${bucket}`;
     exec.exec(`aws s3 sync ${distFolder} ${s3Uri} --region ${bucketRegion}`);
 
+    // 2) publish layer
     exec.exec(`aws lambda publish-layer-version \
-    --layer-name loyalty-ops-configurations-${ENV_NAME} \
-    --description "Loyalty report and monitors configurations layer" \
-    --content S3Bucket=${STACK_BUCKET},S3Key=layer_delta_${NOW}.zip \
+    --layer-name ${layerName} \
+    --description ${layerDescription} \
+    --content S3Bucket=${STACK_BUCKET},S3Key=${packageName} \
     --compatible-runtimes nodejs16.x`);
 
 

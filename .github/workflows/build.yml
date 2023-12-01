@@ -79,3 +79,5 @@ jobs:
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./build_assets
           package-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip
+          layer-name: loyalty-ops-layer-config-${{ vars.ENV_NAME }}
+          layer-description: Loyalty report and monitors configurations layer
