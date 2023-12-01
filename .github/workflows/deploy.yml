@@ -41,5 +41,5 @@ jobs:
       - name: Clean Up Build Staging
         run: |
           NOW = $(date +"%Y-%m-%d-%H-%M")
-          echo "now `${NOW}`"
+          echo "now ${NOW}"
           echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${NOW}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
