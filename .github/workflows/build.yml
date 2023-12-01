@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build_assets
-          path: build/loyalty-ops-layer-config
+          path: ./
       - name: Output Contents
         run: ls -R
       - name: Output Contents
@@ -79,4 +79,4 @@ jobs:
         with:
           bucket: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
-          dist-folder: ./loyalty-ops-layer-config
+          dist-folder: ./loyalty-ops-layer-config/build
