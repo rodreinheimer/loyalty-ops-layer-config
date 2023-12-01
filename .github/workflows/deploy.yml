@@ -4,14 +4,13 @@ on:
     branches:
       - main
 jobs:
-  pre_build:
+  build:
     runs-on: ubuntu-latest
     environment: develop
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      BUILD_TIME: $(date +"%Y-%m-%d-%H-%M")
 
     steps: 
       - name: Get Fundation Repo
@@ -41,4 +40,6 @@ jobs:
 
       - name: Clean Up Build Staging
         run: |
-          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${{ env.BUILD_TIME }}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
+          NOW = $(date +"%Y-%m-%d-%H-%M")
+          echo "now `${NOW}`"
+          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${NOW}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
