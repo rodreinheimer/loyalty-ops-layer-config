@@ -1,0 +1,44 @@
+name: Full Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  pre_build:
+    runs-on: ubuntu-latest
+    environment: develop
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      BUILD_TIME: $(date +"%Y-%m-%d-%H-%M")
+
+    steps: 
+      - name: Get Fundation Repo
+        uses: actions/checkout@v4
+        with:
+          path: build/loyalty-ops-layer-config
+
+      - name: List Root Directory
+        run: |
+          cd build/loyalty-ops-layer-config/nodejs
+          pwd
+          ls -R
+
+      - name: Package Modules Layer
+        run: |
+          cd build/loyalty-ops-layer-config/nodejs
+          ls -lrt
+          find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
+          ls -lrt
+          cd build/loyalty-ops-layer-config
+          zip -vr layer_delta.zip nodejs/ -x "*.DS_Store"
+
+      - name: Clean Up Build Staging
+        run: |
+          cd build/loyalty-ops-layer-config/nodejs
+          find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `rm -f ${line}/default.js`; done
+
+      - name: Clean Up Build Staging
+        run: |
+          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${{ env.BUILD_TIME }}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
