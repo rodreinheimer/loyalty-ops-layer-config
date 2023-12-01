@@ -19,7 +19,7 @@ function run() {
     exec.exec(`aws lambda publish-layer-version \
     --layer-name ${layerName} \
     --description ${layerDescription} \
-    --content S3Bucket=${STACK_BUCKET},S3Key=${packageName} \
+    --content S3Bucket=${bucket},S3Key=${packageName} \
     --compatible-runtimes nodejs16.x`);
 
 
