@@ -77,6 +77,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          bucket: ${{ env.DEPLOYMENT_BUCKET }}
+          bucket: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./loyalty-ops-layer-config
