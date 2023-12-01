@@ -7,8 +7,12 @@ function run() {
     const bucket = core.getInput('bucket', { required: false });
     const bucketRegion = core.getInput('bucket-region', { required: false});
     const distFolder = core.getInput('dist-folder', {required: false});
+    const message = 'bucket[`${bucket}`] bucketRegion[`${bucketRegion}`] distFolder[`${distFolder}`]'
 
-    console.log('bucket[`${bucket}`] bucketRegion[`${bucketRegion}`] distFolder[`${distFolder}`]')
+    console.log(message)
+    onsole.log(bucket)
+    onsole.log(bucketRegion)
+    onsole.log(distFolder)
 
     //2) upload files
     //const s3Uri = `s3://${bucket}`;
