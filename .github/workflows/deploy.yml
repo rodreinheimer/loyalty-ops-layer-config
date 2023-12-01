@@ -30,8 +30,8 @@ jobs:
           cd build/loyalty-ops-layer-config/nodejs
           ls -lrt
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
+          cd ../
           ls -lrt
-          cd build/loyalty-ops-layer-config
           zip -vr layer_delta.zip nodejs/ -x "*.DS_Store"
 
       - name: Clean Up Build Staging
