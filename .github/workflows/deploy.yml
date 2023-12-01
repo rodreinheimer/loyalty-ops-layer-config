@@ -11,7 +11,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      BUILD_KEY: build-id-${{ github.sha }}
+      BUILD_KEY: ${{ github.sha }}
 
     steps: 
       - name: Get Fundation Repo
@@ -32,13 +32,10 @@ jobs:
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
           cd ../
           ls -lrt
-          zip -vr layer_delta.zip nodejs/ -x "*.DS_Store"
+          zip -vr layer_delta_${{ env.BUILD_KEY }}.zip nodejs/ -x "*.DS_Store"
+          ls -lrt
 
       - name: Clean Up Build Staging
         run: |
           cd build/loyalty-ops-layer-config/nodejs
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `rm -f ${line}/default.js`; done
-
-      - name: Clean Up Build Staging
-        run: |
-          echo "loyalty-ops-layer-config - lambda publish [s3 cp ../../layer_delta_${{ env.BUILD_KEY }}.zip s3://${{ vars.DEPLOYMENT_BUCKET }}/]"
