@@ -32,10 +32,38 @@ jobs:
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
           cd ../
           ls -lrt
-          zip -vr layer_delta_${{ env.BUILD_KEY }}.zip nodejs/ -x "*.DS_Store"
+          zip -vr layer_delta.zip nodejs/ -x "*.DS_Store"
           ls -lrt
 
       - name: Clean Up Build Staging
         run: |
           cd build/loyalty-ops-layer-config/nodejs
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `rm -f ${line}/default.js`; done
+
+      - name: Upload Layer Assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: build_assets
+          path: build/loyalty-ops-layer-config/layer_delta_${{ env.BUILD_KEY }}_${{ env.ENV_NAME }}.zip
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build_assets
+          path: build/loyalty-ops-layer-config
+      - name: Output Contents
+        run: ls
+      - name: Deploy Layer
+        id: deploy
+        uses: ./.github/actions/deploy-layer-js
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          bucket: ${{ env.DEPLOYMENT_BUCKET }}
+          bucket_region: ${{ env.AWS_REGION }}
+          dist-folder: ./loyalty-ops-layer-config
