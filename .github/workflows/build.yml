@@ -59,24 +59,22 @@ jobs:
     steps:
       - name: Get Config Repo
         uses: actions/checkout@v4
-        with:
-          path: build/loyalty-ops-layer-config
       - name: Get Build Artifacts
         uses: actions/download-artifact@v3
         with:
           name: build_assets
-          path: ./
+          path: ./build_assets
       - name: Output Contents
         run: ls -R
       - name: Output Contents
-        run: ls ./build/loyalty-ops-layer-config/.github/actions/deploy-layer-js -a -R
+        run: ls ./.github/actions/deploy-layer-js -a -R
       - name: Deploy Layer
         id: deploy
-        uses: ./build/loyalty-ops-layer-config/.github/actions/deploy-layer-js
+        uses: ./.github/actions/deploy-layer-js
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           bucket: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
-          dist-folder: ./loyalty-ops-layer-config/build
+          dist-folder: ./build_assets
