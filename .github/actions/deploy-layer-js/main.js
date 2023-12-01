@@ -10,9 +10,9 @@ function run() {
     const message = 'bucket[`${bucket}`] bucketRegion[`${bucketRegion}`] distFolder[`${distFolder}`]'
 
     console.log(message)
-    onsole.log(bucket)
-    onsole.log(bucketRegion)
-    onsole.log(distFolder)
+    console.log(bucket)
+    console.log(bucketRegion)
+    console.log(distFolder)
 
     //2) upload files
     //const s3Uri = `s3://${bucket}`;
