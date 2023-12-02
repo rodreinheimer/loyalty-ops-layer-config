@@ -5,8 +5,12 @@ async function run() {
     try {
         const bucketName = core.getInput('bucket-name', { required: true });
         const zipFileName = core.getInput('zip-file-name', { required: true })
-        const layerName = core.getInput('layer-name', { required: true })
+        const layerName = core.getInput('layer-name', { required: true });
 
+        console.log(bucketName);
+        console.log(zipFileName);
+        console.log(layerName);
+        
         const lambdaConfig = {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             apiVersion: '2015-03-31',
