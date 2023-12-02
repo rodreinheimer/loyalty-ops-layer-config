@@ -20,8 +20,7 @@ async function run() {
 
         core.info('Publishing...')
 
-        const response = await Lambda
-            .publishLayerVersion({
+        const response = await lambda.publishLayerVersion({
                 Content: {
                     S3Bucket: bucketName,
                     S3Key: zipFileName
