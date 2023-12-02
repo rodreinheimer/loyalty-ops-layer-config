@@ -49,7 +49,7 @@ async function run() {
         console.log(layersArns);
         console.log(typeof layersArns);
 
-        core.setOutput('release-layer-arns', layersArns);
+        core.setOutput('release-layer-arns', JSON.stringify(layersArns));
 
     } catch (error) {
         core.setFailed(error)
