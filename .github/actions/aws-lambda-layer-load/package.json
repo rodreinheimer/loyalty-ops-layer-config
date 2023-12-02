@@ -1,8 +1,9 @@
 {
-  "name": "deploy-layer-js",
+  "name": "aws-lambda-layer-load",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
