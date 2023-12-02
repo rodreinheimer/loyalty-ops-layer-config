@@ -20,6 +20,8 @@ inputs:
 outputs:
   layer-version-arn:
     description: 'Layer version amazon resource number.'
+  release-layer-arns:
+    description: 'Release layers.'
 runs:
   using: 'node16'
   main: 'main.mjs'

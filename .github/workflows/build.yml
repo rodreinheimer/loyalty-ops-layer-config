@@ -93,3 +93,4 @@ jobs:
       - name: Output information
         run: |
           echo "layer-version-arn $${{ steps.publish.outputs.layer-version-arn }}"
+          echo "release-layer-arns $${{ steps.publish.outputs.release-layer-arns }}"
