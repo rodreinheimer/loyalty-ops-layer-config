@@ -29,7 +29,7 @@ async function run() {
             ]
         };
         const publishCommand = new PublishLayerVersionCommand(publishInput);
-        const publishResponse = await client.send(command);
+        const publishResponse = await client.send(publishCommand);
 
         core.setOutput('layer-version-arn', publishResponse.LayerVersionArn);
 
