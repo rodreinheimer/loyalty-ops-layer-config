@@ -40,7 +40,7 @@ async function run() {
         const ListCommand = new ListVersionsByFunctionCommand(listInput);
         const ListResponse = await client.send(ListCommand);
 
-        console.log(ListResponse);
+        console.log(ListResponse.Versions[0].Layers);
 
     } catch (error) {
         core.setFailed(error)
