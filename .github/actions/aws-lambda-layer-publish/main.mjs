@@ -41,15 +41,11 @@ async function run() {
         const ListResponse = await client.send(ListCommand);
 
         //
-        const layersArns = ListResponse.Versions[0].Layers
-            .map(function (layer) {
-                return layer.Arn
-            })
-            .filter(function (layer) {
-                return layer.Arn.indexOf(layerName) > -1 ;
-            });
-
+        const layersArns = ListResponse.Versions[0].Layers.map(layer => layer.Arn);
         console.log(layersArns);
+
+        const layersArns2 = layersArns.filter(layer => layer.Arn.indexOf(layerName) > -1);
+        console.log(layersArns2);
 
     } catch (error) {
         core.setFailed(error)
