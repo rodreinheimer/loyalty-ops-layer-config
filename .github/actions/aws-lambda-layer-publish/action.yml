@@ -16,4 +16,4 @@ outputs:
     description: 'The URL of the deployed website.'
 runs:
   using: 'node16'
-  main: 'main.ts'
+  main: 'main.mjs'
