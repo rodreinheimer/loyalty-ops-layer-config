@@ -40,9 +40,14 @@ async function run() {
         const ListCommand = new ListVersionsByFunctionCommand(listInput);
         const ListResponse = await client.send(ListCommand);
 
-        const layersArns = ListResponse.Versions[0].Layers.map(function (layer) {
-            return layer.Arn
-          });
+        //
+        const layersArns = ListResponse.Versions[0].Layers
+            .map(function (layer) {
+                return layer.Arn
+            })
+            .filter(function (layer) {
+                return layer.Arn.indexOf(layerName) > -1 ;
+            });
 
         console.log(layersArns);
 
