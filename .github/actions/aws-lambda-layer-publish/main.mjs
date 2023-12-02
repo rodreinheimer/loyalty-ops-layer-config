@@ -41,10 +41,14 @@ async function run() {
         const ListResponse = await client.send(ListCommand);
 
         //Prepare Release Layers
-        const layersArns = ListResponse.Versions[0].Layers
+        let layersArns = ListResponse.Versions[0].Layers
         .map(layer => layer.Arn)
         .filter(layer => layer.indexOf(layerName) == -1)
        // .push(publishResponse.LayerVersionArn);
+
+        console.log(layersArns);
+
+        layersArns.push(publishResponse.LayerVersionArn)
 
         console.log(layersArns);
 
