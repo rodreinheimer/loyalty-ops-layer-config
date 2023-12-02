@@ -3,7 +3,7 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 async function run() {
     try {
-        const bucketName = core.getInput('bucke-name', { required: true });
+        const bucketName = core.getInput('bucket-name', { required: true });
         const zipFileName = core.getInput('zip-file-name', { required: true })
         const layerName = core.getInput('layer-name', { required: true })
 

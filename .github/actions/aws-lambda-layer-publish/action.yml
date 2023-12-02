@@ -2,7 +2,7 @@ name: 'Publish AWS Lambda'
 decription: 'Publish layer package file to AWS S3.'
 author: 'reinhed'
 inputs:
-  bucke-name:
+  bucket-name:
     description: 'The S3 bucket name.'
     required: true
   zip-file:
