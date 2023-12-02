@@ -44,7 +44,7 @@ async function run() {
         const layersArns = ListResponse.Versions[0].Layers
         .map(layer => layer.Arn)
         .filter(layer => layer.indexOf(layerName) == -1)
-        .push(publishResponse.LayerVersionArn);
+       // .push(publishResponse.LayerVersionArn);
 
         console.log(layersArns);
 
