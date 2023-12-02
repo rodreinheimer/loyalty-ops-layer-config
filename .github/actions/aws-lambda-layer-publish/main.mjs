@@ -47,8 +47,9 @@ async function run() {
         layersArns.push(publishResponse.LayerVersionArn)
 
         console.log(layersArns);
+        console.log(typeof layersArns);
 
-        core.setOutput('release-layer-arns', JSON.parse(layersArns));
+        core.setOutput('release-layer-arns', layersArns);
 
     } catch (error) {
         core.setFailed(error)
