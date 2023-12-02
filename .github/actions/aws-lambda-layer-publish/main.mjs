@@ -11,7 +11,16 @@ async function run() {
         console.log(zipFileName);
         console.log(bucketName);
 
-        const client = new LambdaClient(config);
+        const lambdaConfig = {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            apiVersion: '2015-03-31',
+            maxRetries: 2,
+            region: process.env.AWS_REGION,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            sslEnabled: true,
+        }
+
+        const client = new LambdaClient(lambdaConfig);
         const input = { // PublishLayerVersionRequest
             LayerName: layerName, // required
             Description: "STRING_VALUE",
