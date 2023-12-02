@@ -40,7 +40,11 @@ async function run() {
         const ListCommand = new ListVersionsByFunctionCommand(listInput);
         const ListResponse = await client.send(ListCommand);
 
-        console.log(ListResponse.Versions[0].Layers);
+        const layersArns = ListResponse.Versions[0].Layers.map(function (layer) {
+            return layer.Arn
+          });
+
+        console.log(layersArns);
 
     } catch (error) {
         core.setFailed(error)
