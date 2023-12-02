@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import Lambda from 'aws-sdk/clients/lambda.js'
+import { LambdaClient, PublishLayerVersionCommand } from "@aws-sdk/client-lambda"
 
 async function run() {
     try {
@@ -9,29 +9,22 @@ async function run() {
 
         console.log(bucketName);
         console.log(zipFileName);
-        console.log(layerName);
-        
-        const lambdaConfig = {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            apiVersion: '2015-03-31',
-            maxRetries: 2,
-            region: process.env.AWS_REGION,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            sslEnabled: true,
-        }
+        console.log(bucketName);
 
-        const lambda = new Lambda(lambdaConfig)
-
-        core.info('Publishing...')
-
-        const response = await lambda.publishLayerVersion({
-                Content: {
-                    S3Bucket: bucketName,
-                    S3Key: zipFileName
-                },
-                layerName,
-            })
-            .promise()
+        const client = new LambdaClient(config);
+        const input = { // PublishLayerVersionRequest
+            LayerName: layerName, // required
+            Description: "STRING_VALUE",
+            Content: { // LayerVersionContentInput
+                S3Bucket: bucketName,
+                S3Key: zipFileName
+            },
+            CompatibleRuntimes: [ // CompatibleRuntimes
+                "nodejs16.x",
+            ]
+        };
+        const command = new PublishLayerVersionCommand(input);
+        const response = await client.send(command);
 
         core.info(`Publish Success : ${response.LayerVersionArn}`)
     } catch (error) {
