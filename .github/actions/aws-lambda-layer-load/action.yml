@@ -1,0 +1,16 @@
+name: 'Upload Layer to AWS S3'
+decription: 'Upload layer package file to AWS S3.'
+inputs:
+  bucke-name:
+    description: 'The S3 bucket name.'
+    required: true
+  bucket-region:
+    description: 'The S3 bucket region.' 
+    required: false
+    default: 'us-west-1'
+  dist-folder:
+    description: 'The folder containing deployalble files.'
+    required: true
+runs:
+  using: 'node16'
+  main: 'main.ts'

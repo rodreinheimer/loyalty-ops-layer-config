@@ -1,0 +1,18 @@
+name: 'Publish AWS Lambda'
+decription: 'Publish layer package file to AWS S3.'
+inputs:
+  bucke-name:
+    description: 'The S3 bucket name.'
+    required: true
+  zip-file:
+    description: 'The name of the zip file.'
+    required: true
+  layer-name:
+    description: 'The name of the layer.'
+    required: true
+outputs:
+  website-url:
+    description: 'The URL of the deployed website.'
+runs:
+  using: 'node16'
+  main: 'main.ts'
