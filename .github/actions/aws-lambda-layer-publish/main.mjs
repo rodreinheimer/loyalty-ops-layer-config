@@ -44,7 +44,7 @@ async function run() {
         const layersArns = ListResponse.Versions[0].Layers.map(layer => layer.Arn);
         console.log(layersArns);
 
-        const layersArns2 = layersArns.filter(layer => layer.Arn.indexOf(layerName) > -1);
+        const layersArns2 = layersArns.filter(layer => layer.Arn !== layerName);
         console.log(layersArns2);
 
     } catch (error) {
