@@ -7,7 +7,7 @@ async function run() {
         const zipFileName = core.getInput('zip-file-name', { required: true })
         const layerName = core.getInput('layer-name', { required: true })
 
-        const lambdaConfig: Lambda.Types.ClientConfiguration = {
+        const lambdaConfig = {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             apiVersion: '2015-03-31',
             maxRetries: 2,
