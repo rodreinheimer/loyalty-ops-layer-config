@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import Lambda from 'aws-sdk/clients/lambda'
+import Lambda from 'aws-sdk/clients/lambda.js'
 
 async function run() {
     try {
