@@ -1,5 +1,6 @@
 name: 'Upload Layer to AWS S3'
 decription: 'Upload layer package file to AWS S3.'
+author: 'reinhed'
 inputs:
   bucke-name:
     description: 'The S3 bucket name.'

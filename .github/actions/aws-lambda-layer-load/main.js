@@ -1,9 +1,9 @@
-import * as exec from '@actions/exec'
-import * as core from '@actions/core'
+const core = require('@actions/core');
+const exec = require('@actions/exec');
 
 function run() {
     // 1) Get Input Values
-    const bucketName = core.getInput('bucke-name', { required: true });
+    const bucketName = core.getInput('bucket-name', { required: true });
     const bucketRegion = core.getInput('bucket-region', { required: true});
     const distFolder = core.getInput('dist-folder', {required: true});
     // 2) Upload Layer Package
