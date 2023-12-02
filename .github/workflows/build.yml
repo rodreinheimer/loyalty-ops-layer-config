@@ -68,7 +68,6 @@ jobs:
         run: ls -R
       - name: Output Contents
         run: ls ./.github/actions/aws-lambda-layer-load -a -R
-
       - name: Update Layer
         id: upload
         uses: ./.github/actions/aws-lambda-layer-load
@@ -79,7 +78,6 @@ jobs:
           bucket-name: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./build_assets
-
       - name: Publish Layer
         id: publish
         uses: ./.github/actions/aws-lambda-layer-publish
@@ -91,7 +89,7 @@ jobs:
           zip-file-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip
           layer-name: loyalty-ops-configurations-${{ vars.ENV_NAME }}
           layer-description: Loyalty report and monitors configurations.
-
+          function-name: loyalty-ops-function-report-purchase-registration-dev
       - name: Output information
         run: |
-          echo "Live URL $${{ steps.publish.outputs.layer-version-arn }}"
+          echo "layer-version-arn $${{ steps.publish.outputs.layer-version-arn }}"

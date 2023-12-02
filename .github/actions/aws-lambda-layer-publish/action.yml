@@ -14,6 +14,9 @@ inputs:
   layer-description:
     description: 'Layer short description.'
     required: true
+  function-name:
+    description: 'Name of the function to update.'
+    required: true
 outputs:
   layer-version-arn:
     description: 'Layer version amazon resource number.'

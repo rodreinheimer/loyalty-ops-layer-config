@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { LambdaClient, PublishLayerVersionCommand } from "@aws-sdk/client-lambda"
+import { LambdaClient, PublishLayerVersionCommand, ListVersionsByFunctionCommand } from "@aws-sdk/client-lambda"
 
 async function run() {
     try {
@@ -7,6 +7,7 @@ async function run() {
         const zipFileName = core.getInput('zip-file-name', { required: true })
         const layerName = core.getInput('layer-name', { required: true });
         const layerDescription = core.getInput('layer-description', { required: true });
+        const functionName = core.getInput('function-name', { required: true });
         const lambdaConfig = {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             apiVersion: '2015-03-31',
@@ -16,7 +17,7 @@ async function run() {
             sslEnabled: true,
         }
         const client = new LambdaClient(lambdaConfig);
-        const input = { 
+        const publishInput = { 
             LayerName: layerName, 
             Description: layerDescription,
             Content: { 
@@ -27,9 +28,20 @@ async function run() {
                 "nodejs16.x",
             ]
         };
-        const command = new PublishLayerVersionCommand(input);
-        const response = await client.send(command);
-        core.setOutput('layer-version-arn', response.LayerVersionArn);
+        const publishCommand = new PublishLayerVersionCommand(publishInput);
+        const publishResponse = await client.send(command);
+
+        core.setOutput('layer-version-arn', publishResponse.LayerVersionArn);
+
+        const listInput = { 
+            FunctionName: functionName, 
+            MaxItems: 1
+        };
+        const ListCommand = new ListVersionsByFunctionCommand(input);
+        const ListResponse = await client.send(command);
+
+        console.log(ListResponse);
+
     } catch (error) {
         core.setFailed(error)
     }
