@@ -43,10 +43,12 @@ async function run() {
         //Prepare Release Layers
         let layersArns = ListResponse.Versions[0].Layers
         .map(layer => layer.Arn)
-        .filter(layer => layer.indexOf(layerName) == -1)
-        .push(publishResponse.LayerVersionArn)
+        .filter(layer => layer.indexOf(layerName) == -1);
+    
+        layersArns.push(publishResponse.LayerVersionArn);
 
         console.log(layersArns);
+        console.log(layersArns[1]);
         console.log(typeof layersArns);
 
         core.setOutput('release-layer-arns', layersArns.join(', '));
