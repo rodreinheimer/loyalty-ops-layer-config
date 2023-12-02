@@ -1,6 +1,5 @@
 {
   "name": "aws-lambda-layer-load",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "main.ts",
