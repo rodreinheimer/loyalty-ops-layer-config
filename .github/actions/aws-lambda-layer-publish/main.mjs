@@ -44,15 +44,11 @@ async function run() {
         let layersArns = ListResponse.Versions[0].Layers
         .map(layer => layer.Arn)
         .filter(layer => layer.indexOf(layerName) == -1)
-       // .push(publishResponse.LayerVersionArn);
-
-        console.log(layersArns);
-
         layersArns.push(publishResponse.LayerVersionArn)
 
         console.log(layersArns);
 
-        core.setOutput('release-layer-arns', layersArns);
+        core.setOutput('release-layer-arns', JSON.parse(layersArns));
 
     } catch (error) {
         core.setFailed(error)
