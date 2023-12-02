@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { LambdaClient, PublishLayerVersionCommand, ListVersionsByFunctionCommand } from "@aws-sdk/client-lambda"
+import { LambdaClient, PublishLayerVersionCommand, ListVersionsByFunctionCommand, UpdateFunctionConfigurationCommand } from "@aws-sdk/client-lambda"
 
 async function run() {
     try {
@@ -8,6 +8,8 @@ async function run() {
         const layerName = core.getInput('layer-name', { required: true });
         const layerDescription = core.getInput('layer-description', { required: true });
         const functionName = core.getInput('function-name', { required: true });
+        
+        //Publish Layers
         const lambdaConfig = {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             apiVersion: '2015-03-31',
@@ -30,29 +32,29 @@ async function run() {
         };
         const publishCommand = new PublishLayerVersionCommand(publishInput);
         const publishResponse = await client.send(publishCommand);
-
         core.setOutput('layer-version-arn', publishResponse.LayerVersionArn);
 
+        //Prepare Release Layers
         const listInput = { 
             FunctionName: functionName, 
             MaxItems: 1
         };
-        const ListCommand = new ListVersionsByFunctionCommand(listInput);
-        const ListResponse = await client.send(ListCommand);
-
-        //Prepare Release Layers
-        let layersArns = ListResponse.Versions[0].Layers
-        .map(layer => layer.Arn)
-        .filter(layer => layer.indexOf(layerName) == -1);
-    
+        const listCommand = new ListVersionsByFunctionCommand(listInput);
+        const listResponse = await client.send(listCommand);
+        let layersArns = listResponse.Versions[0].Layers
+            .map(layer => layer.Arn)
+            .filter(layer => layer.indexOf(layerName) == -1);
         layersArns.push(publishResponse.LayerVersionArn);
-
-        console.log(layersArns);
-        console.log(layersArns[1]);
-        console.log(typeof layersArns);
-
         core.setOutput('release-layer-arns', layersArns.join(', '));
 
+        //Update Function
+        const updateInput = { 
+            FunctionName: functionName, 
+            Layers: layersArns
+        };
+        const updateCommand = new UpdateFunctionConfigurationCommand(updateInput);
+        const updateResponse = await client.send(updateCommand);
+        
     } catch (error) {
         core.setFailed(error)
     }
