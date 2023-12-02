@@ -37,8 +37,8 @@ async function run() {
             FunctionName: functionName, 
             MaxItems: 1
         };
-        const ListCommand = new ListVersionsByFunctionCommand(input);
-        const ListResponse = await client.send(command);
+        const ListCommand = new ListVersionsByFunctionCommand(listInput);
+        const ListResponse = await client.send(ListCommand);
 
         console.log(ListResponse);
 
