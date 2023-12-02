@@ -67,15 +67,27 @@ jobs:
       - name: Output Contents
         run: ls -R
       - name: Output Contents
-        run: ls ./.github/actions/deploy-layer-js -a -R
-      - name: Deploy Layer
-        id: deploy
-        uses: ./.github/actions/deploy-layer-js
+        run: ls ./.github/actions/aws-lambda-layer-load -a -R
+
+      - name: Update Layer
+        id: upload
+        uses: ./.github/actions/aws-lambda-layer-load
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          bucket: ${{ vars.DEPLOYMENT_BUCKET }}
+          bucke-name: ${{ vars.DEPLOYMENT_BUCKET }}
+          bucket-region: ${{ env.AWS_REGION }}
+          dist-folder: ./build_assets
+
+      - name: Publish Layer
+        id: publish
+        uses: ./.github/actions/aws-lambda-layer-publish
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          bucke-name: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./build_assets
           package-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip
