@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const exec = require('@actions/exec');
+import * as core from '@actions/core'
+import * as exec from '@actions/exec'
 
 function run() {
     // 1) Get Input Values
