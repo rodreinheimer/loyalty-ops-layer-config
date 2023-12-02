@@ -11,6 +11,9 @@ inputs:
   layer-name:
     description: 'The name of the layer.'
     required: true
+  layer-description:
+    description: 'Layer short description.'
+    required: true
 outputs:
   layer-version-arn:
     description: 'Layer version amazon resource number.'

@@ -90,6 +90,7 @@ jobs:
           bucket-name: ${{ vars.DEPLOYMENT_BUCKET }}
           zip-file-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip
           layer-name: loyalty-ops-configurations-${{ vars.ENV_NAME }}
+          layer-description: Loyalty report and monitors configurations.
 
       - name: Output information
         run: |
