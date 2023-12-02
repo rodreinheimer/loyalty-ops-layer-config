@@ -46,13 +46,8 @@ async function run() {
 
         console.log(layerName);
 
-        const layersArns2 = layersArns.filter(layer => layer.Arn !== layerName);
+        const layersArns2 = layersArns.filter(layer => layer.indexOf(layerName) > -1);
         console.log(layersArns2);
-
-        var officersIds = layersArns.map(function (layer) {
-            console.log('layer.Arn typeof ' + typeof layer.Arn);
-            return layer.Arn !== layerName
-          });
 
     } catch (error) {
         core.setFailed(error)
