@@ -2,7 +2,7 @@
   "name": "aws-lambda-layer-load",
   "version": "1.0.0",
   "description": "",
-  "main": "main.ts",
+  "main": "main.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
