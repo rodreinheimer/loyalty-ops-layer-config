@@ -89,4 +89,8 @@ jobs:
         with:
           bucket-name: ${{ vars.DEPLOYMENT_BUCKET }}
           zip-file-name: layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip
-          layer-name: loyalty-ops-layer-config-${{ vars.ENV_NAME }}
+          layer-name: loyalty-ops-configurations-${{ vars.ENV_NAME }}
+
+      - name: Output information
+        run: |
+          echo "Live URL $${{ steps.publish.outputs.layer-version-arn }}"

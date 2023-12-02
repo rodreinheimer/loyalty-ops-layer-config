@@ -12,8 +12,8 @@ inputs:
     description: 'The name of the layer.'
     required: true
 outputs:
-  website-url:
-    description: 'The URL of the deployed website.'
+  layer-version-arn:
+    description: 'Layer version amazon resource number.'
 runs:
   using: 'node16'
   main: 'main.mjs'

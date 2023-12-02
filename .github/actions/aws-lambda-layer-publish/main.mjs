@@ -6,11 +6,6 @@ async function run() {
         const bucketName = core.getInput('bucket-name', { required: true });
         const zipFileName = core.getInput('zip-file-name', { required: true })
         const layerName = core.getInput('layer-name', { required: true });
-
-        console.log(bucketName);
-        console.log(zipFileName);
-        console.log(bucketName);
-
         const lambdaConfig = {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             apiVersion: '2015-03-31',
@@ -19,7 +14,6 @@ async function run() {
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
             sslEnabled: true,
         }
-
         const client = new LambdaClient(lambdaConfig);
         const input = { // PublishLayerVersionRequest
             LayerName: layerName, // required
@@ -34,8 +28,7 @@ async function run() {
         };
         const command = new PublishLayerVersionCommand(input);
         const response = await client.send(command);
-
-        core.info(`Publish Success : ${response.LayerVersionArn}`)
+        core.setOutput('layer-version-arn', response.LayerVersionArn);
     } catch (error) {
         core.setFailed(error)
     }
