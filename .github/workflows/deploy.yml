@@ -118,7 +118,8 @@ jobs:
               repo: context.repo.repo,
               issue_number: issue_number,
               body: `App build succeeded
-              ${{join(steps.publish.outputs.*, '\n')}}`
+              layer-version-arn=${{ steps.publish.outputs.layer-version-arn }}\n
+              release-layer-arns=${{ steps.publish.outputs.release-layer-arns }}\n`
             });
             await github.rest.issues.removeLabel({
               owner: context.repo.owner,
@@ -146,7 +147,8 @@ jobs:
               repo: context.repo.repo,
               issue_number: issue_number,
               body: `App build failed
-              ${{join(steps.publish.outputs.*, '\n')}}`
+              layer-version-arn=${{ steps.publish.outputs.layer-version-arn }}\n
+              release-layer-arns=${{ steps.publish.outputs.release-layer-arns }}\n`
             });
             await github.rest.issues.removeLabel({
               owner: context.repo.owner,
