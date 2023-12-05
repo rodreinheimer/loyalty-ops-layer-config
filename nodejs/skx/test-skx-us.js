@@ -56,7 +56,7 @@ const config =
         records: []
       }
     },
-    bucketName: "loyalty-ops-foundation-report-prd",
+    bucketName: "loyalty-ops-foundation-report-dev",
     transports: ["ses", "teams"],
     ses: {
       template: "templates/purchase_registration_report_template.hbs",
