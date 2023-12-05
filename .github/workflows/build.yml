@@ -96,11 +96,11 @@ jobs:
           layer-name: loyalty-ops-configurations-${{ vars.ENV_NAME }}
           layer-description: Loyalty report and monitors configurations.
           function-name: loyalty-ops-function-report-purchase-registration-dev
-
+          
       - name: Output Info
         run: |
-          echo "layer-version-arn=$(steps.publish.outputs.layer-version-arn)\n" >> $GITHUB_OUTPUT
-          echo "release-layer-arns=$(steps.publish.outputs.release-layer-arns)\n" >> $GITHUB_OUTPUT
+          echo "layer-version-arn=${{steps.publish.outputs.layer-version-arn}}\n" >> $GITHUB_OUTPUT
+          echo "release-layer-arns=${{steps.publish.outputs.release-layer-arns}}\n" >> $GITHUB_OUTPUT
 
       - name: Successful Deploy
         if: success() && env.PR_NUMBER
