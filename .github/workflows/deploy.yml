@@ -62,7 +62,7 @@ jobs:
           name: build_assets
           path: ./build_assets
 
-      - name: Add Label to PR
+      - name: Add Label to PR 2
         if: env.PR_NUMBER
         uses: actions/github-script@v6
         with:
