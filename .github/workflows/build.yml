@@ -1,4 +1,4 @@
-name: Full Deploy
+name: Delta Deploy
 on:
   push:
     branches:
@@ -19,21 +19,12 @@ jobs:
         with:
           path: build/loyalty-ops-layer-config
 
-      - name: List Root Directory
-        run: |
-          cd build/loyalty-ops-layer-config/nodejs
-          pwd
-          ls -R
-
       - name: Package Modules Layer
         run: |
           cd build/loyalty-ops-layer-config/nodejs
-          ls -lrt
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
           cd ../
-          ls -lrt
           zip -vr layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip nodejs/ -x "*.DS_Store"
-          ls -lrt
 
       - name: Clean Up Build Staging
         run: |
@@ -54,20 +45,34 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
+      ENV_NAME: ${{ vars.ENV_NAME }}
+      PR_NUMBER: ${{ github.event.number }}
       BUILD_KEY: ${{ github.sha }}
 
     steps:
       - name: Get Config Repo
         uses: actions/checkout@v4
+
       - name: Get Build Artifacts
         uses: actions/download-artifact@v3
         with:
           name: build_assets
           path: ./build_assets
-      - name: Output Contents
-        run: ls -R
-      - name: Output Contents
-        run: ls ./.github/actions/aws-lambda-layer-load -a -R
+
+      - name: Add Label to PR
+        if: env.PR_NUMBER
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            let issue_number = ${{ env.PR_NUMBER }};
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              labels: ['${{ vars.APP_DEPLOYING_LABEL }}']
+            });
+
       - name: Update Layer
         id: upload
         uses: ./.github/actions/aws-lambda-layer-load
@@ -78,6 +83,7 @@ jobs:
           bucket-name: ${{ vars.DEPLOYMENT_BUCKET }}
           bucket-region: ${{ env.AWS_REGION }}
           dist-folder: ./build_assets
+
       - name: Publish Layer
         id: publish
         uses: ./.github/actions/aws-lambda-layer-publish
@@ -90,7 +96,64 @@ jobs:
           layer-name: loyalty-ops-configurations-${{ vars.ENV_NAME }}
           layer-description: Loyalty report and monitors configurations.
           function-name: loyalty-ops-function-report-purchase-registration-dev
-      - name: Output information
+
+      - name: Output Info
         run: |
-          echo "layer-version-arn $${{ steps.publish.outputs.layer-version-arn }}"
-          echo "release-layer-arns $${{ steps.publish.outputs.release-layer-arns }}"
+          echo "layer-version-arn=$(steps.publish.outputs.layer-version-arn)\n" >> $GITHUB_OUTPUT
+          echo "release-layer-arns=$(steps.publish.outputs.release-layer-arns)\n" >> $GITHUB_OUTPUT
+
+      - name: Successful Deploy
+        if: success() && env.PR_NUMBER
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            let fs = require('fs');
+            let issue_number = ${{ env.PR_NUMBER }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: `App build succeeded
+              ${{join(steps.run_tests.outputs.*, '\n')}}`
+            });
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              name: '${{ vars.APP_DEPLOYING_LABEL }}'
+            });
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              labels: ['${{ vars.APP_DEPLOYED_LABEL }}']
+            });
+
+      - name: Failed Deploy
+        if: failure() && env.PR_NUMBER
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            let fs = require('fs');
+            let issue_number = ${{ env.PR_NUMBER }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: `App build failed
+              ${{join(steps.run_tests.outputs.*, '\n')}}`
+            });
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              name: '${{ vars.APP_DEPLOYING_LABEL }}'
+            });
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              labels: ['${{ vars.APP_FAILURE_LABEL }}']
+            });
