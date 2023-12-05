@@ -17,19 +17,19 @@ jobs:
       BUILD_KEY: ${{ github.sha }}
 
     steps: 
-      - name: Get Config Repo
+      - name: Get Configuration Repo
         uses: actions/checkout@v4
         with:
           path: build/loyalty-ops-layer-config
 
-      - name: Package Modules Layer
+      - name: Package Configuration Layer
         run: |
           cd build/loyalty-ops-layer-config/nodejs
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `cp default.js ${line}`; done
           cd ../
           zip -vr layer_delta_${{ env.BUILD_KEY }}_${{ vars.ENV_NAME }}.zip nodejs/ -x "*.DS_Store"
 
-      - name: Clean Up Build Staging
+      - name: Clean Up Build Directory
         run: |
           cd build/loyalty-ops-layer-config/nodejs
           find . -maxdepth 1 -mindepth 1 -type d | while IFS= read -r line; do echo `rm -f ${line}/default.js`; done
@@ -43,7 +43,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: develop
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'develop' }}
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -53,7 +53,7 @@ jobs:
       BUILD_KEY: ${{ github.sha }}
 
     steps:
-      - name: Get Config Repo
+      - name: Get Configuration Repo
         uses: actions/checkout@v4
 
       - name: Get Build Artifacts
